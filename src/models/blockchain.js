@@ -4,7 +4,7 @@ const {Transaction} = require('./transaction');
 class BlockChain{
     constructor(){
         this.chain = [this.createGenesisBlock()];
-        this.difficulty = 2;
+        this.difficulty = 5;
         this.pendingTransactions = [];
         this.miningReward = 100;
     }
@@ -18,18 +18,26 @@ class BlockChain{
     }
 
     minePendingTransacions(miningRewardAddress){
-        let block = new Block(Date.now(), this.pendingTransactions);
+        const rewardTx = new Transaction(null, miningRewardAddress, this.miningReward)
+        this.pendingTransactions.push(rewardTx);
+        let block = new Block(Date.now(), this.pendingTransactions, this.getLatestBlock().hash);
         block.mineBlock(this.difficulty);
         console.log('Block successfully mined');
         this.chain.push(block);
         
-        this.pendingTransactions = [
-            new Transaction(null, miningRewardAddress, this.miningReward)
-        ];
+        this.pendingTransactions = [];
 
     }
 
-    createTransaction(transaction){
+    addTransaction(transaction){
+        if(!transaction.fromAddress || !transaction.toAddress){
+            throw new Error('Transaction must incldude from and to addresses');
+        }
+        
+        if(!transaction.isValid()){
+            throw new Error('Cannot add invalid transaction to chain');
+        }
+
         this.pendingTransactions.push(transaction);
     }
 
@@ -54,10 +62,17 @@ class BlockChain{
             var previousBlock = this.chain[i -1];
             var currentBlock = this.chain[i];
 
+            if(!currentBlock.hasVallidTransactions()){
+                console.log('invalid transactions');
+                return false;
+            }
+
             if(currentBlock.hash !== currentBlock.calculateHash()){
+                console.log('invalid hash');
                 return false;
             }
             if(currentBlock.previousHash !== previousBlock.hash){
+                console.log('invalid previous hash', currentBlock.previousHash, previousBlock.calculateHash() );
                 return false;
             }
         }
