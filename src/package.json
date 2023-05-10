@@ -1,0 +1,19 @@
+{
+  "name": "blockchain-test",
+  "version": "1.0.0",
+  "description": "test for blockchain",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thomas Luijken",
+  "license": "ISC",
+  "Dependencies": {
+    "elliptic": "^6.4.0",
+    "crypto-js": "^3.13.1"
+  },
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "elliptic": "^6.5.4"
+  }
+}

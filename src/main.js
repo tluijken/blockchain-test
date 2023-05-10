@@ -1,6 +1,6 @@
 // checkout https://www.youtube.com/watch?v=zVqczFZr124 
 // this code is base on this tutorial, for educational purposes only
-const {BlockChain, Transaction}  = require('./models/blockchain');
+const { BlockChain, Transaction } = require('./models/blockchain');
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 
